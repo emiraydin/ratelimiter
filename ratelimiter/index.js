@@ -8,11 +8,13 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 	this.userHourlyLimit = userHourlyLimit || Number.MAX_VALUE;
 
 	// Handles requests coming into rate limiter
+	// If the request with userID is allowed, callback_allowed is called
+	// Otherwise callback_blocked is called
 	this.request = function(userID, callback_allowed, callback_blocked) {
 
 	};
 
-	// Increments Redis bucket counters
+	// Increments Redis bucket counters for given userID
 	this.increment = function(userID) {
 
 	};
