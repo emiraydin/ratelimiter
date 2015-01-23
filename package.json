@@ -1,0 +1,15 @@
+{
+  "name": "rate-limiter",
+  "version": "1.0.0",
+  "description": "Rate limiter with Node.js and Redis",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://emiraydin@bitbucket.org/hapicoders/emir-aydin.git"
+  },
+  "author": "Emir Aydin <emir@emiraydin.com>",
+  "license": "MIT"
+}
