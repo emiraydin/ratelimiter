@@ -1,3 +1,6 @@
+var redis = require('redis'),
+	client = redis.createClient();
+
 var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, userDailyLimit, userHourlyLimit) {
 
 	// Initialize instance variables
@@ -7,10 +10,18 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 	this.userDailyLimit = userDailyLimit || Number.MAX_VALUE;
 	this.userHourlyLimit = userHourlyLimit || Number.MAX_VALUE;
 
+	// Initialize key names
+	var globalDailyKey = sourceName + ":global:daily";
+	var globalHourlyKey = sourceName + ":global:hourly";
+	var userDailyKey = sourceName + ":" + userID + ":daily";
+	var userHourlyKey = sourceName + ":" + userID + ":hourly";
+
+
 	// Handles requests coming into rate limiter
 	// If the request with userID is allowed, callback_allowed is called
 	// Otherwise callback_blocked is called
 	this.request = function(userID, callback_allowed, callback_blocked) {
+
 
 	};
 
