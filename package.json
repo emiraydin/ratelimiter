@@ -11,5 +11,8 @@
     "url": "https://emiraydin@bitbucket.org/hapicoders/emir-aydin.git"
   },
   "author": "Emir Aydin <emir@emiraydin.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "redis": "^0.12.1"
+  }
 }
