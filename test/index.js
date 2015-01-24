@@ -4,11 +4,13 @@ redisClient = redis.createClient(),
 RateLimiter = require('../ratelimiter'),
 limits = require('./data');
 
-rateLimiter = new RateLimiter("fitbit", limits, redisClient);
+fitbit = new RateLimiter("fitbit", limits[0], redisClient);
+jawbone = new RateLimiter("jawbone", limits[1], redisClient);
 
 blockedRequests = [],
-	allowedRequests = [];
+allowedRequests = [];
 
+// These are the callbacks for block and allow request
 block = function(uid, limits) {
 	blockedRequests.push(limits);
 };
@@ -19,4 +21,6 @@ allow = function(uid) {
 
 var multiLimitTests = require('./lib/multilimit');
 
-multiLimitTests();
+describe("Multi limit tests", function() {
+	multiLimitTests();
+});

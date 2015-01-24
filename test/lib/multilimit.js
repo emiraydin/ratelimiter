@@ -15,7 +15,7 @@ describe("Request with 1 limit hit", function() {
 
 				// Make 101 requests
 				for (var i = 0; i < 101; i++) {
-					rateLimiter.request('123456', allow, block);
+					fitbit.request('123456', allow, block);
 				};
 
 				setTimeout(function() {
@@ -49,7 +49,7 @@ describe("Request with 2 limit hits", function() {
 
 				// Make 501 requests
 				for (var i = 0; i < 501; i++) {
-					rateLimiter.request('123456', allow, block);
+					fitbit.request('123456', allow, block);
 				};
 
 				setTimeout(function() {
@@ -88,7 +88,7 @@ describe("Request with 3 limit hits", function() {
 
 				// Make 10001 requests
 				for (var i = 0; i < 2001; i++) {
-					rateLimiter.request('123456', allow, block);
+					fitbit.request('123456', allow, block);
 				};
 
 				setTimeout(function() {
