@@ -1,4 +1,4 @@
-var Limit = require('../../ratelimiter/limit');
+var Limit = require('../../lib/limit');
 
 // First limit set for multi limit tests
 var l1 = new Limit("{sourceName}:global:daily", 86400, 4000),

@@ -1,7 +1,7 @@
 expect = require('chai').expect,
 redis = require('redis'),
 redisClient = redis.createClient(),
-RateLimiter = require('../ratelimiter'),
+RateLimiter = require('../lib/ratelimiter'),
 limits = require('./data');
 
 // Initialize two different rate limiters with different limits

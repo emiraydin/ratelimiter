@@ -1,6 +1,6 @@
 // List all imports
-var RateLimiter = require('./ratelimiter'),
-	Limit = require('./ratelimiter/limit'),
+var RateLimiter = require('./lib/ratelimiter'),
+	Limit = require('./lib/limit'),
 	redis = require('redis');
 
 // Create new limits
