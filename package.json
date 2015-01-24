@@ -13,7 +13,6 @@
   "author": "Emir Aydin <emir@emiraydin.com>",
   "license": "MIT",
   "dependencies": {
-    "async": "^0.9.0",
     "redis": "^0.12.1"
   }
 }
