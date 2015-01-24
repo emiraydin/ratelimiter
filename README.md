@@ -7,7 +7,7 @@ This is a rate limiter application built with Node.js and Redis.
 
 ## Before Starting
 1. Please make sure you have [Node.js](http://nodejs.org/download/) installed on your development environment.
-2. Please make sure you have a [Redis server](http://redis.io/download) installed on your development environment.
+2. Please make sure you have a [Redis server](http://redis.io/download) installed on your development environment or make sure you initialize the Redis client with appropriate host and port number later on when you run the application.
 3. Once you clone this repository, run `npm install` on your command line to get all the dependencies.
 
 

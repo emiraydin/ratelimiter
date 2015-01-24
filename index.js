@@ -10,7 +10,9 @@ var l1 = new Limit("{sourceName}:global:daily", 86400, 50000),
 	l4 = new Limit("{sourceName}:{userID}:hourly", 3600, 100);
 
 // Create a client for Redis
-var redisClient = redis.createClient();
+var REDIS_PORT = 6379,
+	REDIS_HOST = "127.0.0.1",
+	redisClient = redis.createClient(REDIS_PORT, REDIS_HOST);
 
 // Create a rate limiter and give as input the created limits
 var rl = new RateLimiter("fitbit", [l1,l2,l3,l4], redisClient);

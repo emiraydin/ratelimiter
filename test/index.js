@@ -1,6 +1,9 @@
+var REDIS_PORT = 6379,
+	REDIS_HOST = "127.0.0.1";
+
 expect = require('chai').expect,
 redis = require('redis'),
-redisClient = redis.createClient(),
+redisClient = redis.createClient(REDIS_PORT, REDIS_HOST),
 RateLimiter = require('../lib/ratelimiter'),
 limits = require('./data');
 
