@@ -100,34 +100,36 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 			.ttl(globalDailyKey, function(err, res) {
 				if (res < 0)
 					client.expire(globalDailyKey, 86400);
-			});
+		});
 
 		// Increment global hourly key
 		multi.incr(globalHourlyKey)
 			.ttl(globalHourlyKey, function(err, res) {
 				if (res < 0)
 					client.expire(globalHourlyKey, 3600);
-			});
+		});
 
 		// Increment user daily key
 		multi.incr(userDailyKey)
 			.ttl(userDailyKey, function(err, res) {
 				if (res < 0)
 					client.expire(userDailyKey, 86400);
-			});
+		});
 
 		// Increment user hourly key
 		multi.incr(userHourlyKey)
 			.ttl(userHourlyKey, function(err, res) {
 				if (res < 0)
 					client.expire(userHourlyKey, 3600);
-			});
+		});
 
 		// Execute multi
 		multi.exec(function(err, res) {
+
 			if (err)
-				console.log('An error occured. Request not recorded.')
-			});
+				console.log('An error occured. Request not recorded.');
+
+		});
 
 	};
 
