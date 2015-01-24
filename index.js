@@ -28,9 +28,7 @@ var allow = function(uid) {
 };
 
 // Send some requests to the rate limiter
-rl.request('123456', allow, block);
-rl.request('123456', allow, block);
-rl.request('123456', allow, block);
-rl.request('123456', allow, block);
-rl.request('123456', allow, block);
-rl.request('123456', allow, block);
+var NUMBER_OF_CALLS = 501;
+for (var i = 0; i < NUMBER_OF_CALLS; i++) {
+	rl.request('123456', allow, block);
+}
