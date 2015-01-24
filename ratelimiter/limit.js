@@ -12,7 +12,7 @@ var Limit = function(keyName, ttl, maxCalls) {
 	else
 		throw new Error("You have to set a TTL for " + keyName);
 	// Maximum count for this limit
-	if (maxLimit)
+	if (maxCalls)
 		this.maxCalls = maxCalls;
 	else
 		throw new Error ("You have to set a max limit for " + keyName);
