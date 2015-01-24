@@ -16,7 +16,6 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 	var userDailyKey = sourceName + ":" + userID + ":daily";
 	var userHourlyKey = sourceName + ":" + userID + ":hourly";
 
-
 	// Handles requests coming into rate limiter
 	// If the request with userID is allowed, callback_allowed is called
 	// Otherwise callback_blocked is called
@@ -27,6 +26,29 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 
 	// Increments Redis bucket counters for given userID
 	this.increment = function(userID) {
+
+		// Start multi for atomicity
+		var multi = client.multi();
+
+		// Initialize key names
+		var globalDailyKey = this.sourceName + ":global:daily";
+		var globalHourlyKey = this.sourceName + ":global:hourly";
+		var userDailyKey = this.sourceName + ":" + userID + ":daily";
+		var userHourlyKey = this.sourceName + ":" + userID + ":hourly";
+
+		// Increment global daily key
+		multi.setnx(globalDailyKey, 0)
+			.incr(globalDailyKey)
+			.ttl(globalDailyKey, function(err, res) {
+				if (res < 0)
+					client.expire(globalDailyKey, 86400);
+			});
+
+		// Execute multi
+		multi.exec(function(err, res) {
+			// console.log('call recorded for user ' + userID);
+			});
+
 
 	};
 
