@@ -24,6 +24,54 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 		// Increment the rate limiter count
 		this.increment(userID);
 
+		// Initialize key names
+		var globalDailyKey = sourceName + ":global:daily";
+		var globalHourlyKey = sourceName + ":global:hourly";
+		var userDailyKey = sourceName + ":" + userID + ":daily";
+		var userHourlyKey = sourceName + ":" + userID + ":hourly";
+
+		var _this = this;
+
+		var checkUserHourlyKey = function(callback) {
+			client.get(userHourlyKey, function(err, res) {
+				if (res > _this.userHourlyLimit) {
+					if (_this.reachedLimits.indexOf(userHourlyKey) < 0)
+						_this.reachedLimits.push(userHourlyKey);
+				}
+				callback();
+			});		
+		};
+
+		var checkGlobalHourlyKey = function(callback) {
+			client.get(globalHourlyKey, function(err, res) {
+				if (res > _this.globalHourlyLimit) {
+					if (_this.reachedLimits.indexOf(globalHourlyKey) < 0)
+						_this.reachedLimits.push(globalHourlyKey);
+				}
+				callback();
+			});
+		};
+
+		var checkUserDailyKey = function(callback) {
+			client.get(userDailyKey, function(err, res) {
+				if (res > _this.userDailyLimit) {
+					if (_this.reachedLimits.indexOf(userDailyKey) < 0)
+						_this.reachedLimits.push(userDailyKey);
+				}
+				callback();
+			});		
+		};
+
+		var checkGlobalDailyKey = function(callback) {
+			client.get(globalDailyKey, function(err, res) {
+				if (res > _this.globalDailyLimit) {
+					if (_this.reachedLimits.indexOf(globalDailyKey) < 0)
+						_this.reachedLimits.push(globalDailyKey);
+				}
+				callback();
+			});			
+
+
 	};
 
 	// Increments Redis bucket counters for given userID
