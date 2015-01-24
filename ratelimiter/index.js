@@ -56,6 +56,9 @@ var RateLimiter = function(sourceName, limits, redisClient) {
 				callbackBlock(userID, _this.reachedLimits);
 			else
 				callbackAllow(userID);
+
+			// Clear reached limits
+			_this.reachedLimits = new Array();
 		});
 
 	};
