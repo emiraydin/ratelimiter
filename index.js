@@ -1,11 +1,12 @@
-var GLOBAL_DAILY_LIMIT = 50000;
-var GLOBAL_HOURLY_LIMIT = 10000;
-var USER_DAILY_LIMIT = 500;
-var USER_HOURLY_LIMIT = 3;
-
 var RateLimiter = require('./ratelimiter');
+var Limit = require('./ratelimiter/limit');
 
-var rl = new RateLimiter("fitbit", GLOBAL_DAILY_LIMIT, GLOBAL_HOURLY_LIMIT, USER_DAILY_LIMIT, USER_HOURLY_LIMIT);
+var l1 = new Limit("{sourceName}:global:daily", 86400, 50000);
+var l2 = new Limit("{sourceName}:global:hourly", 3600, 10000);
+var l3 = new Limit("{sourceName}:{userID}:daily", 86400, 500);
+var l4 = new Limit("{sourceName}:{userID}:hourly", 3600, 3);
+
+var rl = new RateLimiter("fitbit", [l1,l2,l3,l4]);
 
 var blocked = function(limits) {
 	// Add the request to retry scheduler or something
