@@ -11,7 +11,6 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 	this.userDailyLimit = userDailyLimit || Number.MAX_VALUE;
 	this.userHourlyLimit = userHourlyLimit || Number.MAX_VALUE;
 
-
 	// Keep track of reached limits
 	this.reachedLimits = new Array();
 
@@ -97,32 +96,28 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 		var userHourlyKey = this.sourceName + ":" + userID + ":hourly";
 
 		// Increment global daily key
-		multi.setnx(globalDailyKey, 0)
-			.incr(globalDailyKey)
+		multi.incr(globalDailyKey)
 			.ttl(globalDailyKey, function(err, res) {
 				if (res < 0)
 					client.expire(globalDailyKey, 86400);
 			});
 
 		// Increment global hourly key
-		multi.setnx(globalHourlyKey, 0)
-			.incr(globalHourlyKey)
+		multi.incr(globalHourlyKey)
 			.ttl(globalHourlyKey, function(err, res) {
 				if (res < 0)
 					client.expire(globalHourlyKey, 3600);
 			});
 
 		// Increment user daily key
-		multi.setnx(userDailyKey, 0)
-			.incr(userDailyKey)
+		multi.incr(userDailyKey)
 			.ttl(userDailyKey, function(err, res) {
 				if (res < 0)
 					client.expire(userDailyKey, 86400);
 			});
 
 		// Increment user hourly key
-		multi.setnx(userHourlyKey, 0)
-			.incr(userHourlyKey)
+		multi.incr(userHourlyKey)
 			.ttl(userHourlyKey, function(err, res) {
 				if (res < 0)
 					client.expire(userHourlyKey, 3600);
@@ -130,9 +125,9 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 
 		// Execute multi
 		multi.exec(function(err, res) {
-			// console.log('call recorded for user ' + userID);
+			if (err)
+				console.log('An error occured. Request not recorded.')
 			});
-
 
 	};
 
