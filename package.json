@@ -4,7 +4,8 @@
   "description": "Rate limiter with Node.js and Redis",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
