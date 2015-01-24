@@ -4,7 +4,7 @@ var expireTests = function() {
 
 		beforeEach(function(done) {
 
-			this.timeout(3000);
+			this.timeout(AVERAGE_TIMEOUT*3);
 
 			// Clean all recordings
 			redisClient.flushdb(function(err, res) {
@@ -23,12 +23,12 @@ var expireTests = function() {
 						for (var i = 0; i < 10; i++) {
 							jawbone.request('123456', allow, block);
 						}
-					}, 1500)
+					}, AVERAGE_TIMEOUT*1.5)
 
 					// Finish test
 					setTimeout(function() {
 						done();
-					}, 2500);	
+					}, AVERAGE_TIMEOUT*2.5);	
 				}
 			});
 
@@ -53,7 +53,7 @@ var expireTests = function() {
 
 		beforeEach(function(done) {
 
-			this.timeout(5000);
+			this.timeout(AVERAGE_TIMEOUT*5);
 
 			// Clean all recordings
 			redisClient.flushdb(function(err, res) {
@@ -69,20 +69,20 @@ var expireTests = function() {
 
 					setTimeout(function() {
 						blockedRequestsInFirstCall = blockedRequests.length;
-					}, 2000);
+					}, AVERAGE_TIMEOUT*2);
 
 					// Make 10 requests, exactly 1 second after expiration
 					setTimeout(function() {
 						for (var i = 0; i < 5; i++) {
 							jawbone.request('123456', allow, block);
 						}
-					}, 4000);
+					}, AVERAGE_TIMEOUT*4);
 
 					// Finish test
 					setTimeout(function() {
 						blockedRequestsInSecondCall = blockedRequests.length;
 						done();
-					}, 4500);
+					}, AVERAGE_TIMEOUT*4.5);
 				}
 			});
 

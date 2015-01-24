@@ -4,7 +4,7 @@ var multiLimitTests = function() {
 
 		beforeEach(function(done) {
 
-			this.timeout(3000);
+			this.timeout(AVERAGE_TIMEOUT*3);
 
 			// Clean all recordings
 			redisClient.flushdb(function(err, res) {
@@ -20,7 +20,7 @@ var multiLimitTests = function() {
 
 					setTimeout(function() {
 						done();
-					}, 2000);	
+					}, AVERAGE_TIMEOUT*2);	
 				}
 			});
 
@@ -43,7 +43,7 @@ var multiLimitTests = function() {
 
 		beforeEach(function(done) {
 
-			this.timeout(5000);
+			this.timeout(AVERAGE_TIMEOUT*5);
 
 			// Clean all recordings
 			redisClient.flushdb(function(err, res) {
@@ -59,7 +59,7 @@ var multiLimitTests = function() {
 
 					setTimeout(function() {
 						done();
-					}, 4000);	
+					}, AVERAGE_TIMEOUT*4);	
 				}
 			});
 

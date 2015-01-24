@@ -4,7 +4,7 @@ var singleLimitTests = function() {
 
 		beforeEach(function(done) {
 
-			this.timeout(2000);
+			this.timeout(AVERAGE_TIMEOUT*2);
 
 			// Clean all recordings
 			redisClient.flushdb(function(err, res) {
@@ -20,7 +20,7 @@ var singleLimitTests = function() {
 
 					setTimeout(function() {
 						done();
-					}, 1000);	
+					}, AVERAGE_TIMEOUT);	
 				}
 			});
 

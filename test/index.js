@@ -21,6 +21,9 @@ allow = function(uid) {
 	allowedRequests.push(uid);
 };
 
+// Set average timeout for tests
+AVERAGE_TIMEOUT = 1000;
+
 // Run all the tests
 var singleLimitTests = require('./lib/singlelimit'),
 	multiLimitTests = require('./lib/multilimit'),
