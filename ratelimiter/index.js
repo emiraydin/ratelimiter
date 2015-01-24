@@ -21,6 +21,8 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 	// Otherwise callback_blocked is called
 	this.request = function(userID, callback_allowed, callback_blocked) {
 
+		// Increment the rate limiter count
+		this.increment(userID);
 
 	};
 
