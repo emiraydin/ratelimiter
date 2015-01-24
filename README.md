@@ -15,6 +15,14 @@ It is built with Node.js and Redis.
 If you look at `index.js` in the root of the repository, you will see sample code for this application.
 To run the application with this sample code, navigate to the repository root and run `node index` in your command line.
 
+## How to Test this Application
+I wrote some unit tests, covering different cases for limits checking cases in which:
+* Requests hit single limits (single limit tests)
+* Requests hit multiple limits (multi limit tests)
+* Requests blocked before the bucket expired, but allowed after (expire tests)
+
+To run these tests, install mocha globally with `npm install -g mocha`, then run `mocha` command after navigating to the root of the application.
+
 ## Customizing the Application
 In a nutshell, you have to create new instances of `Limit` object for each of your rate limits and then pass these limits as a list to an instance of `RateLimiter` object along with a Redis client. Each class is explained in detail below.
 
