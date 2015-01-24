@@ -1,7 +1,4 @@
-var redis = require('redis'),
-	client = redis.createClient();
-
-var RateLimiter = function(sourceName, limits) {
+var RateLimiter = function(sourceName, limits, redisClient) {
 
 	// Initialize instance variables
 	this.sourceName = sourceName || "undefinedSource";
@@ -19,7 +16,7 @@ var RateLimiter = function(sourceName, limits) {
 		var _this = this;
 
 		// Start multi for an atomic transaction
-		var multi = client.multi();
+		var multi = redisClient.multi();
 
 		limits.forEach(function(limit) {
 
@@ -32,7 +29,7 @@ var RateLimiter = function(sourceName, limits) {
 				.ttl(limit.keyName, function(err,res) {
 					// Set expire value if it isn't set
 					if (res < 0)
-						client.expire(limit.keyName, limit.ttl);
+						redisClient.expire(limit.keyName, limit.ttl);
 				})
 
 		});
