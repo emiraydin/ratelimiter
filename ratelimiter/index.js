@@ -1,5 +1,6 @@
 var redis = require('redis'),
-	client = redis.createClient();
+	client = redis.createClient(),
+	async = require('async');
 
 var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, userDailyLimit, userHourlyLimit) {
 
@@ -69,8 +70,18 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 						_this.reachedLimits.push(globalDailyKey);
 				}
 				callback();
-			});			
+			});		
 
+		async.parallel([checkUserHourlyKey, checkGlobalHourlyKey, checkUserDailyKey, checkGlobalDailyKey],
+			function() {
+
+				if (_this.reachedLimits.length > 0) {
+					callback_blocked(_this.reachedLimits);
+				} else {
+					callback_allowed(userID);
+				}
+
+		});
 
 	};
 
