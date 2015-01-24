@@ -19,7 +19,12 @@ allow = function(uid) {
 	allowedRequests.push(uid);
 };
 
-var multiLimitTests = require('./lib/multilimit');
+var singleLimitTests = require('./lib/singlelimit'),
+	multiLimitTests = require('./lib/multilimit');
+
+describe("Single limit tests", function() {
+	singleLimitTests();
+})
 
 describe("Multi limit tests", function() {
 	multiLimitTests();
