@@ -1,6 +1,5 @@
 var redis = require('redis'),
-	client = redis.createClient(),
-	async = require('async');
+	client = redis.createClient();
 
 var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, userDailyLimit, userHourlyLimit) {
 
@@ -15,76 +14,11 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 	this.reachedLimits = new Array();
 
 	// Handles requests coming into rate limiter
+	// Increments rate limit counters at once atomically, checks within the same call
 	// If the request with userID is allowed, callback_allowed is called
 	// Otherwise callback_blocked is called
+	// this.request = function(userID, callback_allowed, callback_blocked) {
 	this.request = function(userID, callback_allowed, callback_blocked) {
-
-		// Increment the rate limiter count
-		this.increment(userID);
-
-		// Initialize key names
-		var globalDailyKey = sourceName + ":global:daily";
-		var globalHourlyKey = sourceName + ":global:hourly";
-		var userDailyKey = sourceName + ":" + userID + ":daily";
-		var userHourlyKey = sourceName + ":" + userID + ":hourly";
-
-		var _this = this;
-
-		var checkUserHourlyKey = function(callback) {
-			client.get(userHourlyKey, function(err, res) {
-				if (res > _this.userHourlyLimit) {
-					if (_this.reachedLimits.indexOf(userHourlyKey) < 0)
-						_this.reachedLimits.push(userHourlyKey);
-				}
-				callback();
-			});		
-		};
-
-		var checkGlobalHourlyKey = function(callback) {
-			client.get(globalHourlyKey, function(err, res) {
-				if (res > _this.globalHourlyLimit) {
-					if (_this.reachedLimits.indexOf(globalHourlyKey) < 0)
-						_this.reachedLimits.push(globalHourlyKey);
-				}
-				callback();
-			});
-		};
-
-		var checkUserDailyKey = function(callback) {
-			client.get(userDailyKey, function(err, res) {
-				if (res > _this.userDailyLimit) {
-					if (_this.reachedLimits.indexOf(userDailyKey) < 0)
-						_this.reachedLimits.push(userDailyKey);
-				}
-				callback();
-			});		
-		};
-
-		var checkGlobalDailyKey = function(callback) {
-			client.get(globalDailyKey, function(err, res) {
-				if (res > _this.globalDailyLimit) {
-					if (_this.reachedLimits.indexOf(globalDailyKey) < 0)
-						_this.reachedLimits.push(globalDailyKey);
-				}
-				callback();
-			});		
-		};		
-
-		async.parallel([checkUserHourlyKey, checkGlobalHourlyKey, checkUserDailyKey, checkGlobalDailyKey],
-			function() {
-
-				if (_this.reachedLimits.length > 0) {
-					callback_blocked(_this.reachedLimits);
-				} else {
-					callback_allowed(userID);
-				}
-
-		});
-
-	};
-
-	// Increments Redis bucket counters for given userID
-	this.increment = function(userID) {
 
 		// Start multi for atomicity
 		var multi = client.multi();
@@ -123,12 +57,35 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 					client.expire(userHourlyKey, 3600);
 		});
 
+		// List all the limits with their keys
+		var limits = [
+					[globalDailyKey, this.globalDailyLimit],
+					[globalHourlyKey, this.globalHourlyLimit],
+					[userDailyKey, this.userDailyLimit],
+					[userHourlyKey, this.userHourlyLimit]
+					 ];
+		var _this = this;
+
 		// Execute multi
 		multi.exec(function(err, res) {
 
 			if (err)
 				console.log('An error occured. Request not recorded.');
 
+			// Check all limits
+			for (var i = 0; i < 4; i++) {
+				if (res[i*2] > limits[i][1]) {
+					// add to limits if not already added
+					if (_this.reachedLimits.indexOf(limits[i][0]) < 0)
+						_this.reachedLimits.push(limits[i][0]);
+				}
+			}
+
+			// If there are some reached limits, then block the call, otherwise allow
+			if (_this.reachedLimits.length)
+				callback_blocked(_this.reachedLimits);
+			else
+				callback_allowed(userID);
 		});
 
 	};
