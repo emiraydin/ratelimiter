@@ -21,7 +21,7 @@ I wrote some unit tests, covering different cases for limits checking cases in w
 * Requests hit multiple limits (multi limit tests)
 * Requests blocked before the bucket expired, but allowed after (expire tests)
 
-To run these tests, install mocha globally with `npm install -g mocha`, then run `mocha` command after navigating to the root of the application.
+All tests (9/9) should be passing; if there is a problem, it might be because of your processing power, i.e. the speed your computer sends each request. Increasing timeouts in tests should solve such problem, if it ever happens. To run these tests, install mocha globally with `npm install -g mocha`, then run `mocha` command after navigating to the root of the application.
 
 ## Customizing the Application
 In a nutshell, you have to create new instances of `Limit` object for each of your rate limits and then pass these limits as a list to an instance of `RateLimiter` object along with a Redis client. Each class is explained in detail below.
