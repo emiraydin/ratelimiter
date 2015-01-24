@@ -1,13 +1,13 @@
 // List all imports
-var RateLimiter = require('./ratelimiter');
-var Limit = require('./ratelimiter/limit');
-var redis = require('redis');
+var RateLimiter = require('./ratelimiter'),
+	Limit = require('./ratelimiter/limit'),
+	redis = require('redis');
 
 // Create new limits
-var l1 = new Limit("{sourceName}:global:daily", 86400, 50000);
-var l2 = new Limit("{sourceName}:global:hourly", 3600, 10000);
-var l3 = new Limit("{sourceName}:{userID}:daily", 86400, 500);
-var l4 = new Limit("{sourceName}:{userID}:hourly", 3600, 100);
+var l1 = new Limit("{sourceName}:global:daily", 86400, 50000),
+	l2 = new Limit("{sourceName}:global:hourly", 3600, 10000),
+	l3 = new Limit("{sourceName}:{userID}:daily", 86400, 500),
+	l4 = new Limit("{sourceName}:{userID}:hourly", 3600, 100);
 
 // Create a client for Redis
 var redisClient = redis.createClient();
