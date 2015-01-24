@@ -16,20 +16,21 @@ var redisClient = redis.createClient();
 var rl = new RateLimiter("fitbit", [l1,l2,l3,l4], redisClient);
 
 // This function will be called if the rate limiter blocks the request
-var blocked = function(uid, limits) {
+var block = function(uid, limits) {
 	// Add the request to retry scheduler or something
 	console.log("REQUEST NOT ALLOWED for user: " + uid + " | LIMIT(s) REACHED: " + limits);
 };
 
 // This function will be called if rate limiter allows the request
-var allowed = function(uid) {
+var allow = function(uid) {
 	// Let the request go through
 	console.log("REQUEST ALLOWED for user: " + uid);
 };
 
 // Send some requests to the rate limiter
-rl.request('123456', allowed, blocked);
-rl.request('123456', allowed, blocked);
-rl.request('123456', allowed, blocked);
-rl.request('123456', allowed, blocked);
-rl.request('123456', allowed, blocked);
+rl.request('123456', allow, block);
+rl.request('123456', allow, block);
+rl.request('123456', allow, block);
+rl.request('123456', allow, block);
+rl.request('123456', allow, block);
+rl.request('123456', allow, block);

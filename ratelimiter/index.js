@@ -8,10 +8,10 @@ var RateLimiter = function(sourceName, limits, redisClient) {
 
 	// Handles requests coming into rate limiter
 	// Increments rate limit counters at once atomically, checks within the same call
-	// If the request with userID is allowed, callback_allowed is called
-	// Otherwise callback_blocked is called
-	// this.request = function(userID, callback_allowed, callback_blocked) {
-	this.request = function(userID, callback_allowed, callback_blocked) {
+	// If the request with userID is allowed, callbackAllow is called
+	// Otherwise callbackBlock is called
+	// this.request = function(userID, callbackAllow, callbackBlock) {
+	this.request = function(userID, callbackAllow, callbackBlock) {
 
 		var _this = this;
 
@@ -53,9 +53,9 @@ var RateLimiter = function(sourceName, limits, redisClient) {
 
 			// Call the given callback functions depending on whether there is a reached limit
 			if (_this.reachedLimits.length)
-				callback_blocked(userID, _this.reachedLimits);
+				callbackBlock(userID, _this.reachedLimits);
 			else
-				callback_allowed(userID);
+				callbackAllow(userID);
 		});
 
 	};
