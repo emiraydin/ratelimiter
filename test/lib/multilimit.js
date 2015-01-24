@@ -16,7 +16,7 @@ var multiLimitTests = function() {
 					// Make 501 requests
 					for (var i = 0; i < 501; i++) {
 						fitbit.request('123456', allow, block);
-					};
+					}
 
 					setTimeout(function() {
 						done();
@@ -55,7 +55,7 @@ var multiLimitTests = function() {
 					// Make 10001 requests
 					for (var i = 0; i < 2001; i++) {
 						fitbit.request('123456', allow, block);
-					};
+					}
 
 					setTimeout(function() {
 						done();

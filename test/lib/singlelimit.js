@@ -16,7 +16,7 @@ var singleLimitTests = function() {
 					// Make 101 requests
 					for (var i = 0; i < 101; i++) {
 						fitbit.request('123456', allow, block);
-					};
+					}
 
 					setTimeout(function() {
 						done();
