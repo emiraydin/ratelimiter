@@ -18,7 +18,7 @@ var RateLimiter = function(sourceName, limits) {
 
 		var _this = this;
 
-		// Start multi for atomicity
+		// Start multi for an atomic transaction
 		var multi = client.multi();
 
 		limits.forEach(function(limit) {
@@ -27,6 +27,7 @@ var RateLimiter = function(sourceName, limits) {
 			limit.keyName = limit.keyName.replace('{sourceName}', _this.sourceName)
 									.replace('{userID}', userID);
 
+			// Increment the counter and get TTL (set if it doesn't exist)
 			multi.incr(limit.keyName)
 				.ttl(limit.keyName, function(err,res) {
 					// Set expire value if it isn't set
@@ -40,10 +41,12 @@ var RateLimiter = function(sourceName, limits) {
 		multi.exec(function(err, res) {
 
 			if (err)
-				console.log('An error occured. Request not recorded.');
+				console.log('An error occured. Request was not recorded.');
 
 			// Check all limits
 			for (var i = 0; i < limits.length; i++) {
+				// Response has indices of multiples of 2
+				// This is because of 2 multi calls per limit (incr and ttl)
 				if (res[i*2] > limits[i].maxLimit) {
 					// add to limits if not already added
 					if (_this.reachedLimits.indexOf(limits[i].keyName) < 0)
@@ -51,7 +54,7 @@ var RateLimiter = function(sourceName, limits) {
 				}
 			}
 
-			// If there are some reached limits, then block the call, otherwise allow
+			// Call the given callback functions depending on whether there is a reached limit
 			if (_this.reachedLimits.length)
 				callback_blocked(_this.reachedLimits);
 			else
