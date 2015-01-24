@@ -56,7 +56,7 @@ var RateLimiter = function(sourceName, limits) {
 
 			// Call the given callback functions depending on whether there is a reached limit
 			if (_this.reachedLimits.length)
-				callback_blocked(_this.reachedLimits);
+				callback_blocked(userID, _this.reachedLimits);
 			else
 				callback_allowed(userID);
 		});
