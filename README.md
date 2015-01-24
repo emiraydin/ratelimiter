@@ -1,6 +1,5 @@
-# Rate Limiter for Outgoing Requests
-This is a rate limiter application built for outgoing requests to API services.
-It is built with Node.js and Redis.
+# Rate Limiter
+This is a rate limiter application built with Node.js and Redis.
 
 * **Author:** Emir Aydin
 * **Email:** emir@emiraydin.com
@@ -11,9 +10,11 @@ It is built with Node.js and Redis.
 2. Please make sure you have a [Redis client](http://redis.io/download) installed on your development environment.
 3. Once you clone this repository, run `npm install` on your command line to get all the dependencies.
 
+
 ## How to Run this Application
 If you look at `index.js` in the root of the repository, you will see sample code for this application.
 To run the application with this sample code, navigate to the repository root and run `node index` in your command line.
+
 
 ## How to Test this Application
 I wrote some unit tests, covering different cases for limits checking cases in which:
@@ -22,6 +23,7 @@ I wrote some unit tests, covering different cases for limits checking cases in w
 * Requests blocked before the bucket expired, but allowed after (expire tests)
 
 All tests (9/9) should be passing; if there is a problem, it might be because of your processing power, i.e. the speed your computer sends each request. Increasing timeouts in tests should solve such problem, if it ever happens. To run these tests, install mocha globally with `npm install -g mocha`, then run `mocha` command after navigating to the root of the application.
+
 
 ## Customizing the Application
 In a nutshell, you have to create new instances of `Limit` object for each of your rate limits and then pass these limits as a list to an instance of `RateLimiter` object along with a Redis client. Each class is explained in detail below.
@@ -41,12 +43,14 @@ In a nutshell, you have to create new instances of `Limit` object for each of yo
 * **limits** is an array of `Limit` object instances
 * **redisClient** is an instance of a redis client
 
-## How Does It Work
+
+## How Does It Work?
 1. When a request comes into the rate limiter for the first time, a key is created with given TTL and a counter that is also incremented.
 2. Any request that comes into the rate limiter after that will only increment the existing key's value. Within the same call, rate limiter will also check the incremented value if it exceeds the provided limit. If so, it calls the given callback that might in return add the request into retry scheduler. If it doesn't exceed the provided limit, it will then call the given callback which will allow the request.
 3. After given TTL, each key will expire and new ones will be created only if another request is made after the initial key expired. So this minimizes number of information we have to store.
 
-## Design Decisions Made
+
+## Design Goals and Decisions
 I had to take a few important things into account when building this application:
 
 **1. Response time should be as fast as possible**
@@ -67,9 +71,9 @@ I had to take a few important things into account when building this application
 **4. Be able to live in a distributed environment**
 
 * Decision above (#3) also influenced this one.
-* Redis can be used to avoid race conditions by using locks and atomic increment operations which also return the result of the increment after the same call.
+* I avoided race conditions by using atomic increment operations which also return the result of the increment after the same call.
 * Redis supports partioning.
-* There can be different instances of the RateLimiter object running, but they will all have access to the same traffic info.
+* There can be different instances of the RateLimiter object running, but they will all have access to the same traffic info via Redis.
 
 **5. Number and type of limits should be flexible**
 
