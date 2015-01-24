@@ -20,7 +20,8 @@ allow = function(uid) {
 };
 
 var singleLimitTests = require('./lib/singlelimit'),
-	multiLimitTests = require('./lib/multilimit');
+	multiLimitTests = require('./lib/multilimit'),
+	expireTests = require('./lib/expire');
 
 describe("Single limit tests", function() {
 	singleLimitTests();
@@ -28,4 +29,8 @@ describe("Single limit tests", function() {
 
 describe("Multi limit tests", function() {
 	multiLimitTests();
+});
+
+describe("Expire tests", function() {
+	expireTests();
 });
