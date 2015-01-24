@@ -4,9 +4,11 @@ redisClient = redis.createClient(),
 RateLimiter = require('../ratelimiter'),
 limits = require('./data');
 
+// Initialize two different rate limiters with different limits
 fitbit = new RateLimiter("fitbit", limits[0], redisClient);
 jawbone = new RateLimiter("jawbone", limits[1], redisClient);
 
+// Allowed and blocked requests will be stored in these arrays
 blockedRequests = [],
 allowedRequests = [];
 
@@ -19,6 +21,7 @@ allow = function(uid) {
 	allowedRequests.push(uid);
 };
 
+// Run all the tests
 var singleLimitTests = require('./lib/singlelimit'),
 	multiLimitTests = require('./lib/multilimit'),
 	expireTests = require('./lib/expire');
