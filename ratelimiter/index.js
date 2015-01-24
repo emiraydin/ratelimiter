@@ -44,6 +44,30 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 					client.expire(globalDailyKey, 86400);
 			});
 
+		// Increment global hourly key
+		multi.setnx(globalHourlyKey, 0)
+			.incr(globalHourlyKey)
+			.ttl(globalHourlyKey, function(err, res) {
+				if (res < 0)
+					client.expire(globalHourlyKey, 3600);
+			});
+
+		// Increment user daily key
+		multi.setnx(userDailyKey, 0)
+			.incr(userDailyKey)
+			.ttl(userDailyKey, function(err, res) {
+				if (res < 0)
+					client.expire(userDailyKey, 86400);
+			});
+
+		// Increment user hourly key
+		multi.setnx(userHourlyKey, 0)
+			.incr(userHourlyKey)
+			.ttl(userHourlyKey, function(err, res) {
+				if (res < 0)
+					client.expire(userHourlyKey, 3600);
+			});
+
 		// Execute multi
 		multi.exec(function(err, res) {
 			// console.log('call recorded for user ' + userID);
