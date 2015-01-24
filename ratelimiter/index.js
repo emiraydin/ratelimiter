@@ -1,14 +1,10 @@
 var redis = require('redis'),
 	client = redis.createClient();
 
-var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, userDailyLimit, userHourlyLimit) {
+var RateLimiter = function(sourceName, limits) {
 
 	// Initialize instance variables
 	this.sourceName = sourceName || "undefinedSource";
-	this.globalDailyLimit = globalDailyLimit || Number.MAX_VALUE;
-	this.globalHourlyLimit = globalHourlyLimit || Number.MAX_VALUE;
-	this.userDailyLimit = userDailyLimit || Number.MAX_VALUE;
-	this.userHourlyLimit = userHourlyLimit || Number.MAX_VALUE;
 
 	// Keep track of reached limits
 	this.reachedLimits = new Array();
@@ -20,51 +16,25 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 	// this.request = function(userID, callback_allowed, callback_blocked) {
 	this.request = function(userID, callback_allowed, callback_blocked) {
 
+		var _this = this;
+
 		// Start multi for atomicity
 		var multi = client.multi();
 
-		// Initialize key names
-		var globalDailyKey = this.sourceName + ":global:daily";
-		var globalHourlyKey = this.sourceName + ":global:hourly";
-		var userDailyKey = this.sourceName + ":" + userID + ":daily";
-		var userHourlyKey = this.sourceName + ":" + userID + ":hourly";
+		limits.forEach(function(limit) {
 
-		// Increment global daily key
-		multi.incr(globalDailyKey)
-			.ttl(globalDailyKey, function(err, res) {
-				if (res < 0)
-					client.expire(globalDailyKey, 86400);
+			// Replace the source name and user ID with actual values in the key name
+			limit.keyName = limit.keyName.replace('{sourceName}', _this.sourceName)
+									.replace('{userID}', userID);
+
+			multi.incr(limit.keyName)
+				.ttl(limit.keyName, function(err,res) {
+					// Set expire value if it isn't set
+					if (res < 0)
+						client.expire(limit.keyName, limit.ttl);
+				})
+
 		});
-
-		// Increment global hourly key
-		multi.incr(globalHourlyKey)
-			.ttl(globalHourlyKey, function(err, res) {
-				if (res < 0)
-					client.expire(globalHourlyKey, 3600);
-		});
-
-		// Increment user daily key
-		multi.incr(userDailyKey)
-			.ttl(userDailyKey, function(err, res) {
-				if (res < 0)
-					client.expire(userDailyKey, 86400);
-		});
-
-		// Increment user hourly key
-		multi.incr(userHourlyKey)
-			.ttl(userHourlyKey, function(err, res) {
-				if (res < 0)
-					client.expire(userHourlyKey, 3600);
-		});
-
-		// List all the limits with their keys
-		var limits = [
-					[globalDailyKey, this.globalDailyLimit],
-					[globalHourlyKey, this.globalHourlyLimit],
-					[userDailyKey, this.userDailyLimit],
-					[userHourlyKey, this.userHourlyLimit]
-					 ];
-		var _this = this;
 
 		// Execute multi
 		multi.exec(function(err, res) {
@@ -73,11 +43,11 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 				console.log('An error occured. Request not recorded.');
 
 			// Check all limits
-			for (var i = 0; i < 4; i++) {
-				if (res[i*2] > limits[i][1]) {
+			for (var i = 0; i < limits.length; i++) {
+				if (res[i*2] > limits[i].maxLimit) {
 					// add to limits if not already added
-					if (_this.reachedLimits.indexOf(limits[i][0]) < 0)
-						_this.reachedLimits.push(limits[i][0]);
+					if (_this.reachedLimits.indexOf(limits[i].keyName) < 0)
+						_this.reachedLimits.push(limits[i].keyName);
 				}
 			}
 
