@@ -11,11 +11,9 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 	this.userDailyLimit = userDailyLimit || Number.MAX_VALUE;
 	this.userHourlyLimit = userHourlyLimit || Number.MAX_VALUE;
 
-	// Initialize key names
-	var globalDailyKey = sourceName + ":global:daily";
-	var globalHourlyKey = sourceName + ":global:hourly";
-	var userDailyKey = sourceName + ":" + userID + ":daily";
-	var userHourlyKey = sourceName + ":" + userID + ":hourly";
+
+	// Keep track of reached limits
+	this.reachedLimits = new Array();
 
 	// Handles requests coming into rate limiter
 	// If the request with userID is allowed, callback_allowed is called
@@ -71,6 +69,7 @@ var RateLimiter = function(sourceName, globalDailyLimit, globalHourlyLimit, user
 				}
 				callback();
 			});		
+		};		
 
 		async.parallel([checkUserHourlyKey, checkGlobalHourlyKey, checkUserDailyKey, checkGlobalDailyKey],
 			function() {

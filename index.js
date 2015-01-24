@@ -17,4 +17,9 @@ var allowed = function(uid) {
 	console.log("REQUEST ALLOWED for user: " + uid);
 };
 
-rl.call('123456', allowed, blocked);
+rl.request('123456', allowed, blocked);
+rl.request('123456', allowed, blocked);
+rl.request('123456', allowed, blocked);
+rl.request('123456', allowed, blocked);
+rl.request('123456', allowed, blocked);
+
