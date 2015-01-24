@@ -1,4 +1,4 @@
-var Limit = function(keyName, ttl, maxLimit) {
+var Limit = function(keyName, ttl, maxCalls) {
 
 	// {sourceName} inside the key name will be replaced by actual source name
 	// {userID} inside the key name will be replaced by actual user ID
@@ -13,7 +13,7 @@ var Limit = function(keyName, ttl, maxLimit) {
 		throw new Error("You have to set a TTL for " + keyName);
 	// Maximum count for this limit
 	if (maxLimit)
-		this.maxLimit = maxLimit;
+		this.maxCalls = maxCalls;
 	else
 		throw new Error ("You have to set a max limit for " + keyName);
 	

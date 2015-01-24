@@ -44,7 +44,7 @@ var RateLimiter = function(sourceName, limits, redisClient) {
 			for (var i = 0; i < limits.length; i++) {
 				// Response has indices of multiples of 2
 				// This is because of 2 multi calls per limit (incr and ttl)
-				if (res[i*2] > limits[i].maxLimit) {
+				if (res[i*2] > limits[i].maxCalls) {
 					// add to limits if not already added
 					if (_this.reachedLimits.indexOf(limits[i].keyName) < 0)
 						_this.reachedLimits.push(limits[i].keyName);
