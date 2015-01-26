@@ -35,12 +35,18 @@ In a nutshell, you have to create new instances of `Limit` object for each of yo
 * **keyName** is the name of the keys that will be stored in Redis. Inside your key name, you can use two placeholders:
     1. `{sourceName}`: This will be replaced with the actual source name later on during the execution.
     2. `{userID}`: This will be replaced with the actual user ID for that call later on during the execution.
+    3. As a rule of thumb, name your keys as `{sourceName}:{userID}:limitName` if the limit is per user, `{sourceName}:{userID}:global:limitName` if the limit is across all users. See below examples to get a better understanding of the naming convention.
 * **TTL** is the time to live for the limit in seconds. i.e. 3600 four hourly, 86400 for daily limits
 * **maxCalls** is the maximum number of calls allowed for the limit.
 
-**Example:** A daily rate limit (TTL=86400 seconds) with 500 calls per user:
+**Examples:**
+* A daily rate limit (TTL=86400 seconds) with 500 calls per user:
 
-`var l = new Limit("{sourceName}:{userID}:daily", 86400, 500);`
+    `var l = new Limit("{sourceName}:{userID}:daily", 86400, 500);`
+
+* An hourly rate limit (TTL=3600 seconds) with 1000 calls across all users:
+
+    `var l = new Limit("{sourceName}:global:hourly", 86400, 500);`
 
 ### 2. RateLimiter (sourceName, limits, redisClient)
 * **sourceName** is the name of the source. i.e. Fitbit
