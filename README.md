@@ -40,6 +40,7 @@ In a nutshell, you have to create new instances of `Limit` object for each of yo
 * **maxCalls** is the maximum number of calls allowed for the limit.
 
 **Examples:**
+
 * A daily rate limit (TTL=86400 seconds) with 500 calls per user:
 
     `var l = new Limit("{sourceName}:{userID}:daily", 86400, 500);`
@@ -52,6 +53,11 @@ In a nutshell, you have to create new instances of `Limit` object for each of yo
 * **sourceName** is the name of the source. i.e. Fitbit
 * **limits** is an array of `Limit` object instances
 * **redisClient** is an instance of a redis client
+
+#### RateLimiter.request (userID, callbackAllow, callbackBlock)
+* **userID** is the unique identifier for the user. If you don't have a set user ID, you can use things such as IP or session number.
+* **callbackAllow** is the function that will be called if the request is allowed to go through.
+* **callbackBlock** is the function that will be called if the request is not allowed to go through.
 
 
 ## How Does It Work?
