@@ -4,8 +4,6 @@ var multiLimitTests = function() {
 
 		beforeEach(function(done) {
 
-			this.timeout(AVERAGE_TIMEOUT*3);
-
 			// Clean all recordings
 			redisClient.flushdb(function(err, res) {
 				if (res === "OK") {
@@ -14,13 +12,12 @@ var multiLimitTests = function() {
 					allowedRequests = [];
 
 					// Make 501 requests
-					for (var i = 0; i < 501; i++) {
-						fitbit.request('123456', allow, block);
-					}
+					dispatcher.singleUser(0, 501, fitbit, function() {
 
-					setTimeout(function() {
 						done();
-					}, AVERAGE_TIMEOUT*2);	
+
+					});
+
 				}
 			});
 
@@ -43,8 +40,6 @@ var multiLimitTests = function() {
 
 		beforeEach(function(done) {
 
-			this.timeout(AVERAGE_TIMEOUT*5);
-
 			// Clean all recordings
 			redisClient.flushdb(function(err, res) {
 				if (res === "OK") {
@@ -52,14 +47,10 @@ var multiLimitTests = function() {
 					blockedRequests = [];
 					allowedRequests = [];
 
-					// Make 10001 requests
-					for (var i = 0; i < 2001; i++) {
-						fitbit.request('123456', allow, block);
-					}
-
-					setTimeout(function() {
+					// Make 2001 requests
+					dispatcher.singleUser(0, 2001, fitbit, function() {
 						done();
-					}, AVERAGE_TIMEOUT*4);	
+					});
 				}
 			});
 
