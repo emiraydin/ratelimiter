@@ -21,52 +21,28 @@ var REDIS_PORT = 6379,
 // Create a rate limiter and give as input the created limits and Redis client
 var rl = new RateLimiter("fitbit", [l1,l2,l3,l4], redisClient);
 
-// Send requests one after another for a single user
-var requestDispatcher = function(i, NUMBER_OF_CALLS) {
-	if (i < NUMBER_OF_CALLS) {
-		rl.request('123456', function(err, res) {
-			if (err)
-				console.log("REQUEST NOT ALLOWED for user: " +
-					err.uid + " | LIMIT(s) REACHED: " + err.reachedLimits);
-			else
-				console.log("REQUEST ALLOWED for user: " + res.uid);
-			// Send the next request
-			requestDispatcher(i+1, NUMBER_OF_CALLS);
-		});
-	}
-};
-
 // Send requests for two users one after another
-var simultaneousRequestDispatcher = function(i, NUMBER_OF_CALLS) {
-
+var requestDispatcher = function(i, NUMBER_OF_CALLS, NUMBER_OF_USERS, finalCallback) {
+	var userID = "user-" + (i % NUMBER_OF_USERS);
 	if (i < NUMBER_OF_CALLS) {
-		// If i is even, send request as user1, send it as user2 otherwise
-		if (i % 2 == 0) {
-			rl.request('user1', function(err, res) {
+			rl.request(userID, function(err, res) {
 				if (err)
 					console.log("REQUEST #" + (i+1) + " IS NOT ALLOWED for user: " +
 						err.uid + " | LIMIT(s) REACHED: " + err.reachedLimits);
 				else
 					console.log("REQUEST #" + (i+1) + " IS ALLOWED for user: " + res.uid);
-			// Send the next request
-			simultaneousRequestDispatcher(i+1, NUMBER_OF_CALLS);
+				
+				if (i == NUMBER_OF_CALLS - 1)
+					finalCallback();
+				// Send the next request
+				requestDispatcher(i+1, NUMBER_OF_CALLS, NUMBER_OF_USERS, finalCallback);
 			});
-		} else {
-			rl.request('user2', function(err, res) {
-				if (err)
-					console.log("REQUEST #" + (i+1) + " IS NOT ALLOWED for user: " +
-						err.uid + " | LIMIT(s) REACHED: " + err.reachedLimits);
-				else
-					console.log("REQUEST #"+ (i+1) + " IS ALLOWED for user: " + res.uid);				
-			// Send the next request
-			simultaneousRequestDispatcher(i+1, NUMBER_OF_CALLS);
-			});
-		}
 	}
 
 };
 
-// Start sending the requests
-// requestDispatcher(0, 201);
-
-simultaneousRequestDispatcher(0, 201);
+// Send 201 requests for 2 different users
+requestDispatcher(0, 201, 2, function() {
+	console.log("201 requests were successfully sent for 2 different users.");
+	process.exit();
+});
