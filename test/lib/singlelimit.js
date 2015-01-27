@@ -4,8 +4,6 @@ var singleLimitTests = function() {
 
 		beforeEach(function(done) {
 
-			this.timeout(AVERAGE_TIMEOUT*2);
-
 			// Clean all recordings
 			redisClient.flushdb(function(err, res) {
 				if (res === "OK") {
@@ -14,13 +12,9 @@ var singleLimitTests = function() {
 					allowedRequests = [];
 
 					// Make 101 requests
-					for (var i = 0; i < 101; i++) {
-						fitbit.request('123456', allow, block);
-					}
-
-					setTimeout(function() {
+					dispatcher.singleUser(0, 101, fitbit, function() {
 						done();
-					}, AVERAGE_TIMEOUT);	
+					});
 				}
 			});
 
