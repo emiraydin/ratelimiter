@@ -1,7 +1,9 @@
 // Dispatches requests based on total number of calls
 var singleUser = function(i, NUMBER_OF_CALLS, rateLimiter, finalCallback) {
 	if (i < NUMBER_OF_CALLS) {
-		rateLimiter.request('123456', function(err, res) {
+		rateLimiter.request('user1', function(err, res) {
+			// If requests are blocked add them to the blockedRequests array
+			// Otherwise add the uid to allowedRequests array
 			if (err)
 				blockedRequests.push(err.reachedLimits);
 			else
