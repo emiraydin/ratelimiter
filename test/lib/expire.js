@@ -47,7 +47,7 @@ var expireTests = function() {
 
 		beforeEach(function(done) {
 
-			this.timeout(4000);
+			this.timeout(5000);
 
 			// Clean all recordings
 			redisClient.flushdb(function(err, res) {
@@ -65,7 +65,7 @@ var expireTests = function() {
 								blockedRequestsInSecondCall = blockedRequests.length;
 								done();
 							});
-						}, 3500);
+						}, 4000);
 					});
 
 				}
