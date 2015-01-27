@@ -1,6 +1,6 @@
 var Limit = require('../../lib/limit');
 
-// First limit set for multi limit tests
+// First limit set for single, multi limit and multi user tests
 var l1 = new Limit("{sourceName}:global:daily", 86400, 4000),
 	l2 = new Limit("{sourceName}:global:hourly", 3600, 2000),
 	l3 = new Limit("{sourceName}:{userID}:daily", 86400, 500),

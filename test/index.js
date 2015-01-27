@@ -5,8 +5,7 @@ expect = require('chai').expect,
 redis = require('redis'),
 redisClient = redis.createClient(REDIS_PORT, REDIS_HOST),
 RateLimiter = require('../lib/ratelimiter'),
-limits = require('./data'),
-dispatcher = require('./helpers/dispatcher');
+limits = require('./data');
 
 // Initialize two different rate limiters with different limits
 fitbit = new RateLimiter("fitbit", limits[0], redisClient);
@@ -16,10 +15,14 @@ jawbone = new RateLimiter("jawbone", limits[1], redisClient);
 blockedRequests = [],
 allowedRequests = [];
 
+// Require the request dispatcher
+dispatcher = require('./helpers/dispatcher');
+
 // Run all the tests
 var singleLimitTests = require('./lib/singlelimit'),
 	multiLimitTests = require('./lib/multilimit'),
-	expireTests = require('./lib/expire');
+	expireTests = require('./lib/expire'),
+	multiUserTests = require('./lib/multiuser');
 
 describe("Single limit tests", function() {
 	singleLimitTests();
@@ -31,4 +34,8 @@ describe("Multi limit tests", function() {
 
 describe("Expire tests", function() {
 	expireTests();
+});
+
+describe("Multi user tests", function() {
+	multiUserTests();
 });
