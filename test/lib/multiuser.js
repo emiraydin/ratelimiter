@@ -14,9 +14,9 @@ var multiUserTests = function() {
 					allowedRequests = [];
 
 					// Make 201 requests
-					dispatcher.twoUsers(0, 201, fitbit, function() {
+					requestDispatcher(0, 201, 2, fitbit, function() {
 						blockedRequestsAfterFirstCall = blockedRequests.length;
-						dispatcher.twoUsers(0, 801, fitbit, function() {
+						requestDispatcher(0, 801, 2, fitbit, function() {
 							done();
 						});
 					});
@@ -50,9 +50,9 @@ var multiUserTests = function() {
 					allowedRequests = [];
 
 					// Make 201 requests
-					dispatcher.threeUsers(0, 301, fitbit, function() {
+					requestDispatcher(0, 301, 3, fitbit, function() {
 						blockedRequestsAfterFirstCall = blockedRequests.length;
-						dispatcher.threeUsers(0, 1700, fitbit, function() {
+						requestDispatcher(0, 1700, 3, fitbit, function() {
 							done();
 						});
 					});

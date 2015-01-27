@@ -12,10 +12,8 @@ var multiLimitTests = function() {
 					allowedRequests = [];
 
 					// Make 501 requests
-					dispatcher.singleUser(0, 501, fitbit, function() {
-
+					requestDispatcher(0, 501, 1, fitbit, function() {
 						done();
-
 					});
 
 				}
@@ -48,7 +46,7 @@ var multiLimitTests = function() {
 					allowedRequests = [];
 
 					// Make 2001 requests
-					dispatcher.singleUser(0, 2001, fitbit, function() {
+					requestDispatcher(0, 2001, 1, fitbit, function() {
 						done();
 					});
 				}

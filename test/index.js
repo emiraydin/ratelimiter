@@ -15,8 +15,7 @@ jawbone = new RateLimiter("jawbone", limits[1], redisClient);
 blockedRequests = [],
 allowedRequests = [];
 
-// Require the request dispatcher
-dispatcher = require('./helpers/dispatcher');
+requestDispatcher = require('./helpers/dispatcher');
 
 // Run all the tests
 var singleLimitTests = require('./lib/singlelimit'),

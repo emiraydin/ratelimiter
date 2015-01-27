@@ -12,11 +12,11 @@ var expireTests = function() {
 					allowedRequests = [];
 
 					// Make 10 requests
-					dispatcher.singleUser(0, 10, jawbone, function() {
+					requestDispatcher(0, 10, 1, jawbone, function() {
 
 						// Make 10 requests exactly 1 second after that
 						setTimeout(function() {
-							dispatcher.singleUser(0, 10, jawbone, function() {
+							requestDispatcher(0, 10, 1, jawbone, function() {
 								done();
 							}, 1000);
 						});
@@ -57,11 +57,11 @@ var expireTests = function() {
 					allowedRequests = [];
 
 					// Make 501 requests
-					dispatcher.singleUser(0, 501, jawbone, function() {
+					requestDispatcher(0, 501, 1, jawbone, function() {
 						blockedRequestsInFirstCall = blockedRequests.length;
 						// Make 5 requests, 3.5 seconds after the first one
 						setTimeout(function() {
-							dispatcher.singleUser(0, 5, jawbone, function() {
+							requestDispatcher(0, 5, 1, jawbone, function() {
 								blockedRequestsInSecondCall = blockedRequests.length;
 								done();
 							});

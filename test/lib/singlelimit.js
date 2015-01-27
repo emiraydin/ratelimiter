@@ -12,7 +12,7 @@ var singleLimitTests = function() {
 					allowedRequests = [];
 
 					// Make 101 requests
-					dispatcher.singleUser(0, 101, fitbit, function() {
+					requestDispatcher(0, 101, 1, fitbit, function() {
 						done();
 					});
 				}
