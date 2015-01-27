@@ -21,26 +21,6 @@ var REDIS_PORT = 6379,
 // Create a rate limiter and give as input the created limits and Redis client
 var rl = new RateLimiter("fitbit", [l1,l2,l3,l4], redisClient);
 
-// This function will be called if the rate limiter blocks the request
-var block = function(uid, limits) {
-	// Add the request to retry scheduler or something
-	console.log("REQUEST NOT ALLOWED for user: " + uid + " | LIMIT(s) REACHED: " + limits);
-};
-
-// This function will be called if rate limiter allows the request
-var allow = function(uid) {
-	// Let the request go through
-	console.log("REQUEST ALLOWED for user: " + uid);
-};
-
-// // Send some requests to the rate limiter
-var NUMBER_OF_CALLS = 200;
-for (var i = 0; i < NUMBER_OF_CALLS; i++) {
-	// Send a request to the rate limiter with userID=123456
-	// with allow and block callbacks as defined above
-	rl.request('123456', allow, block);
-}
-
 // Send requests one after another for a single user
 var requestDispatcher = function(i) {
 	if (i < NUMBER_OF_CALLS) {
