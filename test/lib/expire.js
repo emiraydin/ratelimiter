@@ -59,13 +59,13 @@ var expireTests = function() {
 					// Make 501 requests
 					dispatcher.singleUser(0, 501, jawbone, function() {
 						blockedRequestsInFirstCall = blockedRequests.length;
-						// Make 5 requests, 3 seconds after the first one
+						// Make 5 requests, 3.5 seconds after the first one
 						setTimeout(function() {
 							dispatcher.singleUser(0, 5, jawbone, function() {
 								blockedRequestsInSecondCall = blockedRequests.length;
 								done();
-							})
-						}, 3000);
+							});
+						}, 3500);
 					});
 
 				}
