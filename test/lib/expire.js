@@ -4,8 +4,6 @@ var expireTests = function() {
 
 		beforeEach(function(done) {
 
-			this.timeout(AVERAGE_TIMEOUT*3);
-
 			// Clean all recordings
 			redisClient.flushdb(function(err, res) {
 				if (res === "OK") {
@@ -14,21 +12,17 @@ var expireTests = function() {
 					allowedRequests = [];
 
 					// Make 10 requests
-					for (var i = 0; i < 10; i++) {
-						jawbone.request('123456', allow, block);
-					}
+					dispatcher.singleUser(0, 10, jawbone, function() {
 
-					// Make 10 requests, exactly 1.5 seconds after that
-					setTimeout(function() {
-						for (var i = 0; i < 10; i++) {
-							jawbone.request('123456', allow, block);
-						}
-					}, AVERAGE_TIMEOUT*1.5)
+						// Make 10 requests exactly 1 second after that
+						setTimeout(function() {
+							dispatcher.singleUser(0, 10, jawbone, function() {
+								done();
+							}, 1000);
+						});
 
-					// Finish test
-					setTimeout(function() {
-						done();
-					}, AVERAGE_TIMEOUT*2.5);	
+					});
+
 				}
 			});
 
@@ -53,7 +47,7 @@ var expireTests = function() {
 
 		beforeEach(function(done) {
 
-			this.timeout(AVERAGE_TIMEOUT*5);
+			this.timeout(4000);
 
 			// Clean all recordings
 			redisClient.flushdb(function(err, res) {
@@ -63,26 +57,17 @@ var expireTests = function() {
 					allowedRequests = [];
 
 					// Make 501 requests
-					for (var i = 0; i < 501; i++) {
-						jawbone.request('123456', allow, block);
-					}
-
-					setTimeout(function() {
+					dispatcher.singleUser(0, 501, jawbone, function() {
 						blockedRequestsInFirstCall = blockedRequests.length;
-					}, AVERAGE_TIMEOUT*2);
+						// Make 5 requests, 3 seconds after the first one
+						setTimeout(function() {
+							dispatcher.singleUser(0, 5, jawbone, function() {
+								blockedRequestsInSecondCall = blockedRequests.length;
+								done();
+							})
+						}, 3000);
+					});
 
-					// Make 10 requests, exactly 1 second after expiration
-					setTimeout(function() {
-						for (var i = 0; i < 5; i++) {
-							jawbone.request('123456', allow, block);
-						}
-					}, AVERAGE_TIMEOUT*4);
-
-					// Finish test
-					setTimeout(function() {
-						blockedRequestsInSecondCall = blockedRequests.length;
-						done();
-					}, AVERAGE_TIMEOUT*4.5);
 				}
 			});
 
