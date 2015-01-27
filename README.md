@@ -52,10 +52,16 @@ In a nutshell, you have to create new instances of `Limit` object for each of yo
 * **limits** is an array of `Limit` object instances
 * **redisClient** is an instance of a redis client
 
-#### RateLimiter.request (userID, callbackAllow, callbackBlock)
+#### RateLimiter.request (userID, callback(err, res))
 * **userID** is the unique identifier for the user. If you don't have a set user ID, you can use things such as IP or session number.
-* **callbackAllow** is the function that will be called if the request is allowed to go through.
-* **callbackBlock** is the function that will be called if the request is not allowed to go through.
+* **callback(err, res)** is the function that will be called after request was made.
+	* **err** has three attributes:
+		* **err.uid**: User ID for the blocked request
+		* **err.message**: Error message
+		* **err.reachedLimits**: All the limits that are hit with the request
+	* **res** has two attributes:
+		* **res.message**: Success message
+		* **res.uid**: User ID for the allowed request
 
 
 ## How Does It Work?
