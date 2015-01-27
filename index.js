@@ -48,6 +48,8 @@ var simultaneousRequestDispatcher = function(i, NUMBER_OF_CALLS) {
 						err.uid + " | LIMIT(s) REACHED: " + err.reachedLimits);
 				else
 					console.log("REQUEST #" + (i+1) + " IS ALLOWED for user: " + res.uid);
+			// Send the next request
+			simultaneousRequestDispatcher(i+1, NUMBER_OF_CALLS);
 			});
 		} else {
 			rl.request('user2', function(err, res) {
@@ -56,10 +58,10 @@ var simultaneousRequestDispatcher = function(i, NUMBER_OF_CALLS) {
 						err.uid + " | LIMIT(s) REACHED: " + err.reachedLimits);
 				else
 					console.log("REQUEST #"+ (i+1) + " IS ALLOWED for user: " + res.uid);				
+			// Send the next request
+			simultaneousRequestDispatcher(i+1, NUMBER_OF_CALLS);
 			});
 		}
-		// Send the next request
-		simultaneousRequestDispatcher(i+1, NUMBER_OF_CALLS);
 	}
 
 };
