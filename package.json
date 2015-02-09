@@ -1,7 +1,7 @@
 {
   "name": "rate-limiter",
   "version": "2.1.0",
-  "description": "Rate limiter with Node.js and Redis",
+  "description": "A rate limiter for APIs, built with Node.js and Redis.",
   "main": "index.js",
   "scripts": {
     "start": "node index",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://emiraydin@bitbucket.org/hapicoders/emir-aydin.git"
+    "url": "https://github.com/emiraydin/ratelimiter.git"
   },
   "author": "Emir Aydin <emir@emiraydin.com>",
   "license": "MIT",
