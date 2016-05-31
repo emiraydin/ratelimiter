@@ -14,7 +14,7 @@
   "author": "Emir Aydin <emir@emiraydin.com>",
   "license": "MIT",
   "dependencies": {
-    "redis": "^0.12.1"
+    "redis": "^2.5.3"
   },
   "devDependencies": {
     "chai": "^1.10.0",
