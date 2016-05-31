@@ -1,5 +1,5 @@
 # Rate Limiter
-This is a rate limiter application built with Node.js and Redis.
+This is a rate limiter application built with Node.js and Redis. You can plug your API/service's incoming or outgoing requests into this application and limit requests as you wish.
 * **Author:** Emir Aydin
 * **Email:** emir@emiraydin.com
 * **github**: [emiraydin](http://github.com/emiraydin)
