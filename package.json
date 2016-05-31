@@ -1,5 +1,5 @@
 {
-  "name": "rate-limiter",
+  "name": "ratelimiter-js",
   "version": "2.1.0",
   "description": "A rate limiter for APIs, built with Node.js and Redis.",
   "main": "index.js",
@@ -18,6 +18,8 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^2.11.9",
+    "istanbul": "^0.4.3",
     "mocha": "^2.5.3"
   }
 }
