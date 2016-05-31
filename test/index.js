@@ -2,6 +2,8 @@ var REDIS_PORT = 6379,
 	REDIS_HOST = "127.0.0.1";
 
 expect = require('chai').expect,
+assert = require('chai').assert,
+Limit = require('../lib/limit'),
 redis = require('redis'),
 redisClient = redis.createClient(REDIS_PORT, REDIS_HOST),
 RateLimiter = require('../lib/ratelimiter'),
@@ -21,7 +23,8 @@ requestDispatcher = require('./helpers/dispatcher');
 var singleLimitTests = require('./lib/singlelimit'),
 	multiLimitTests = require('./lib/multilimit'),
 	expireTests = require('./lib/expire'),
-	multiUserTests = require('./lib/multiuser');
+	multiUserTests = require('./lib/multiuser'),
+  errorHandlingTests = require('./lib/errorhandling');
 
 describe("Single limit tests", function() {
 	singleLimitTests();
@@ -38,3 +41,7 @@ describe("Expire tests", function() {
 describe("Multi user tests", function() {
 	multiUserTests();
 });
+
+describe("Error handling tests", function() {
+  errorHandlingTests();
+})
