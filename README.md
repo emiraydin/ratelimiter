@@ -1,9 +1,12 @@
 # Rate Limiter
 This is a rate limiter application built with Node.js and Redis.
-
 * **Author:** Emir Aydin
 * **Email:** emir@emiraydin.com
 * **github**: [emiraydin](http://github.com/emiraydin)
+
+[![Build Status](https://travis-ci.org/emiraydin/ratelimiter.svg?branch=master)](https://travis-ci.org/emiraydin/ratelimiter)
+[![Coverage Status](https://coveralls.io/repos/github/emiraydin/ratelimiter/badge.svg?branch=master)](https://coveralls.io/github/emiraydin/ratelimiter?branch=master)
+[![Dependency Status](https://gemnasium.com/badges/github.com/emiraydin/ratelimiter.svg)](https://gemnasium.com/github.com/emiraydin/ratelimiter)
 
 ## Before Starting
 1. Please make sure you have [Node.js](http://nodejs.org/download/) installed on your development environment.
