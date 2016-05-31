@@ -1,6 +1,6 @@
 {
   "name": "ratelimiter-js",
-  "version": "2.1.0",
+  "version": "2.1.3",
   "description": "A rate limiter for APIs, built with Node.js and Redis.",
   "main": "index.js",
   "scripts": {
